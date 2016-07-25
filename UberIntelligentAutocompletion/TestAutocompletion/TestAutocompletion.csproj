@@ -55,11 +55,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="MainUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test.in" />
+    <None Include="test.out" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -68,6 +69,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Tools\Tools.csproj">
+      <Project>{1C9BC3A0-5D4B-4107-BFBF-0042DC12983F}</Project>
+      <Name>Tools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UberIntelligentAutocompletion\UberIntelligentAutocompletion.csproj">
       <Project>{8B6224D8-AD3D-400D-BD47-217536EE5E32}</Project>
       <Name>UberIntelligentAutocompletion</Name>

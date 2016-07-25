@@ -63,9 +63,19 @@ namespace TestAutocompletion {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] test {
+        internal static byte[] testIn {
             get {
-                object obj = ResourceManager.GetObject("test", resourceCulture);
+                object obj = ResourceManager.GetObject("testIn", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] testOut {
+            get {
+                object obj = ResourceManager.GetObject("testOut", resourceCulture);
                 return ((byte[])(obj));
             }
         }
