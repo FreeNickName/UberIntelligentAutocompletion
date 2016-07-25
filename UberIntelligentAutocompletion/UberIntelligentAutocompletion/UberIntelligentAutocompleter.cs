@@ -45,7 +45,7 @@ namespace UberIntelligentAutocompletion
         /// <param name="line">Строка.</param>
         /// <param name="output">Вывод.</param>
         /// <returns></returns>
-        public bool Complete(string line, StreamWriter output)
+        public bool Complete(string line, TextWriter output)
         {
             if (null == output) throw new ArgumentNullException(nameof(output));
             if (String.IsNullOrWhiteSpace(line)) throw new ArgumentException("Line is empty", nameof(line));

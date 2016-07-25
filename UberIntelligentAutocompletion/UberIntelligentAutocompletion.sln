@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAutocompletion", "TestA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools", "Tools\Tools.csproj", "{1C9BC3A0-5D4B-4107-BFBF-0042DC12983F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAutocompletion", "ServerAutocompletion\ServerAutocompletion.csproj", "{38C1A7EC-1CFA-4471-924D-F99F50512BBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{1C9BC3A0-5D4B-4107-BFBF-0042DC12983F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C9BC3A0-5D4B-4107-BFBF-0042DC12983F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C9BC3A0-5D4B-4107-BFBF-0042DC12983F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38C1A7EC-1CFA-4471-924D-F99F50512BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38C1A7EC-1CFA-4471-924D-F99F50512BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38C1A7EC-1CFA-4471-924D-F99F50512BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38C1A7EC-1CFA-4471-924D-F99F50512BBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
