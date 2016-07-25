@@ -18,38 +18,28 @@ namespace TestAutocompletion
 
             using (var inputStream = new MemoryStream(Resources.test))
             using (var reader = new StreamReader(inputStream, Encoding.ASCII))
+            using (var outputStream = new StreamWriter(@"test.out"))
             {
-                var result = new DictionaryWords().Load(reader);
+                var autocompleter = new UberIntelligentAutocompleter(reader);
 
                 //var timestampDictionaryParsed = timer.ElapsedMilliseconds;
                 //Console.WriteLine($"Parse Dictionary Words for {timestampDictionaryParsed}ms");
 
-                using (var outputStream = new StreamWriter(@"test.out"))
+                var line = reader.ReadLine();
+                var countWords = int.Parse(line);
+                while (--countWords >= 0)
                 {
+                    line = reader.ReadLine();
+                    if (autocompleter.Complete(line, outputStream))
                     {
-                        if (reader.EndOfStream)
-                        {
-                            return;
-                        }
-
-                        var autocompleter = new UberIntelligentAutocompleter(result);
-
-                        var line = reader.ReadLine();
-                        var countWords = int.Parse(line);
-                        while (--countWords >= 0)
-                        {
-                            line = reader.ReadLine();
-                            if (autocompleter.Autocomplete(line, outputStream))
-                            {
-                                outputStream.WriteLine();
-                            }
-                        }
+                        outputStream.WriteLine();
                     }
                 }
-
-                timer.Stop();
-                //Console.WriteLine($"Autocomplete Words for {timer.ElapsedMilliseconds - timestampDictionaryParsed}ms");
             }
+
+            timer.Stop();
+            //Console.WriteLine($"Autocomplete Words for {timer.ElapsedMilliseconds - timestampDictionaryParsed}ms");
+
             Assert.IsFalse(timer.ElapsedMilliseconds > 10 * 1000);
         }
     }

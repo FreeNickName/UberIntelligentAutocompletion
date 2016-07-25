@@ -8,28 +8,20 @@ using System.Threading.Tasks;
 namespace UberIntelligentAutocompletion
 {
     /// <summary>
-    /// Словарь символов.
+    /// Таблица символов.
     /// </summary>
-    public class DictionaryWords
+    public class TableSymbols : Dictionary<char, SymbolEntry>
     {
         /// <summary>
-        /// Содержимое словаря.
-        /// </summary>
-        public IDictionary<char, SymbolNode> Data { get; private set; } = new Dictionary<char, SymbolNode>();
-
-        /// <summary>
-        /// Загрузить данные в словарь.
+        /// Загрузить данные в таблицу.
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public IDictionary<char, SymbolNode> Load(StreamReader reader)
+        public static TableSymbols Load(StreamReader reader)
         {
             if (null == reader) throw new ArgumentNullException(nameof(reader));
+            if (reader.EndOfStream) throw new ArgumentException("EndOfStream", nameof(reader));
 
-            if (reader.EndOfStream)
-            {
-                return Data;
-            }
             var line = reader.ReadLine();
 
             int countWords;
@@ -38,6 +30,7 @@ namespace UberIntelligentAutocompletion
                 throw new Exception($"Count word in source is wrong: Can't parse '{line}'");
             }
 
+            var result = new TableSymbols();
             while (--countWords >= 0)
             {
                 line = reader.ReadLine();
@@ -51,23 +44,23 @@ namespace UberIntelligentAutocompletion
                 }
 
                 var isNew = false;
-                SymbolNode node = null;
-                var tableSymbols = Data;
+                SymbolEntry entry = null;
+                var tableSymbols = result;
                 foreach (var symbol in word)
                 {
-                    if (isNew || !tableSymbols.TryGetValue(symbol, out node))
+                    if (isNew || !tableSymbols.TryGetValue(symbol, out entry))
                     {
-                        tableSymbols.Add(symbol, node = new SymbolNode(symbol));
+                        tableSymbols.Add(symbol, entry = new SymbolEntry(symbol));
                         isNew = true;
                     }
 
-                    node.Weight += weight;
-                    node.Count++;
-                    tableSymbols = node.Next;
+                    entry.Weight += weight;
+                    entry.Count++;
+                    tableSymbols = entry.Next;
                 }
-                node.IsEnd = true;
+                entry.IsEnd = true;
             }
-            return Data;
+            return result;
         }
     }
 }

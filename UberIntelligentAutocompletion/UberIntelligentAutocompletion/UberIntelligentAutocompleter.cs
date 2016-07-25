@@ -17,16 +17,22 @@ namespace UberIntelligentAutocompletion
         /// </summary>
         /// <param name="dictionary">Словарь.</param>
         /// <param name="maxCompleted">Максимальное кол-во слов в подсказке.</param>
-        public UberIntelligentAutocompleter(IDictionary<char, SymbolNode> dictionary, int maxCompleted = 10)
+        public UberIntelligentAutocompleter(TableSymbols dictionary, int maxCompleted = 10)
         {
             Dictionary = dictionary;
+            MaxCompleted = maxCompleted;
+        }
+
+        public UberIntelligentAutocompleter(StreamReader dictionaryReader, int maxCompleted = 10)
+        {
+            Dictionary = TableSymbols.Load(dictionaryReader);
             MaxCompleted = maxCompleted;
         }
 
         /// <summary>
         /// Словарь.
         /// </summary>
-        public IDictionary<char, SymbolNode> Dictionary { get; private set; }
+        public TableSymbols Dictionary { get; private set; }
 
         /// <summary>
         /// Максимальное кол-во слов в подсказке.
@@ -39,33 +45,30 @@ namespace UberIntelligentAutocompletion
         /// <param name="line">Строка.</param>
         /// <param name="output">Вывод.</param>
         /// <returns></returns>
-        public bool Autocomplete(string line, StreamWriter output)
+        public bool Complete(string line, StreamWriter output)
         {
             if (null == output) throw new ArgumentNullException(nameof(output));
+            if (String.IsNullOrWhiteSpace(line)) throw new ArgumentException("Line is empty", nameof(line));
 
             var hashSet = Dictionary;
-            SymbolNode node = null;
-
-            for (int i = 0; i < line.Length; ++i)
+            SymbolEntry entry = null;
+            foreach (var symbol in line)
             {
-                var symbol = line[i];
-
-                if (!hashSet.TryGetValue(symbol, out node))
+                if (!hashSet.TryGetValue(symbol, out entry))
                 {
                     return false;
                 }
-                hashSet = node.Next;
+                hashSet = entry.Next;
             }
 
             var limit = MaxCompleted;
-            if (node.IsEnd)
+            if (entry.IsEnd)
             {
                 output.WriteLine(line);
                 --limit;
             }
 
-            FindWords(node.Next.OrderByDescending(o => o.Value.Weight).ThenBy(n => n.Key), line, ref limit, output);
-            return true;
+            return FindWords(entry.Next.OrderByDescending(o => o.Value.Weight).ThenBy(n => n.Key), line, ref limit, output) < MaxCompleted;
         }
 
         /// <summary>
@@ -75,7 +78,8 @@ namespace UberIntelligentAutocompletion
         /// <param name="startWord">Строка, которую необходимо дополнить.</param>
         /// <param name="limit">Счетчик выводимых дополнений.</param>
         /// <param name="output">Вывод.</param>
-        private void FindWords(IEnumerable<KeyValuePair<char, SymbolNode>> wordCompletion, string startWord, ref int limit, StreamWriter output)
+        /// <returns>Оставшийся лимит.</returns>
+        private int FindWords(IEnumerable<KeyValuePair<char, SymbolEntry>> wordCompletion, string startWord, ref int limit, StreamWriter output)
         {
             foreach (var symbolNode in wordCompletion)
             {
@@ -96,6 +100,7 @@ namespace UberIntelligentAutocompletion
                 var newStart = (string)startWord.Clone() + symbolNode.Key;
                 FindWords(symbolNode.Value.Next.OrderByDescending(o => o.Value.Weight).ThenBy(n => n.Key), newStart, ref limit, output);
             }
+            return limit;
         }
     }
 }

@@ -40,9 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DictionaryWords.cs" />
+    <Compile Include="TableSymbols.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SymbolNode.cs" />
+    <Compile Include="SymbolEntry.cs" />
     <Compile Include="UberIntelligentAutocompleter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

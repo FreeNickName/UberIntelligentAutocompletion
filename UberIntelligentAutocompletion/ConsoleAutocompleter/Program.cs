@@ -12,26 +12,28 @@ namespace ConsoleAutocompleter
     {
         static void Main(string[] args)
         {
-            using (var reader = new StreamReader(Console.OpenStandardInput(), Encoding.ASCII))
+            using (var input = new StreamReader(Console.OpenStandardInput(), Encoding.ASCII))
+            using (var output = new StreamWriter(Console.OpenStandardOutput()))
             {
-                var result = new DictionaryWords().Load(reader);
-                using (var outputStream = new StreamWriter(Console.OpenStandardOutput()))
+                if (input.EndOfStream)
                 {
-                    if (reader.EndOfStream)
-                    {
-                        return;
-                    }
-                    var autocompleter = new UberIntelligentAutocompleter(result);
+                    return;
+                }
+                var autocompleter = new UberIntelligentAutocompleter(input);
 
-                    var line = reader.ReadLine();
-                    var countWords = int.Parse(line);
-                    while (--countWords >= 0)
+                var line = input.ReadLine();
+                int countWords;
+                if (!int.TryParse(line, out countWords))
+                {
+                    throw new Exception($"Count word in source is wrong: Can't parse '{line}'");
+                }
+
+                while (--countWords >= 0)
+                {
+                    line = input.ReadLine();
+                    if (autocompleter.Complete(line, output))
                     {
-                        line = reader.ReadLine();
-                        if (autocompleter.Autocomplete(line, outputStream))
-                        {
-                            outputStream.WriteLine();
-                        }
+                        output.WriteLine();
                     }
                 }
             }

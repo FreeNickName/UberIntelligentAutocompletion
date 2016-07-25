@@ -9,9 +9,9 @@ namespace UberIntelligentAutocompletion
     /// <summary>
     /// Информация о положении символа в слове.
     /// </summary>
-    public class SymbolNode
+    public class SymbolEntry
     {
-        public SymbolNode(char value)
+        public SymbolEntry(char value)
         {
             Value = value;
         }
@@ -39,6 +39,6 @@ namespace UberIntelligentAutocompletion
         /// <summary>
         /// Следующие символы.
         /// </summary>
-        public Dictionary<char, SymbolNode> Next { get; private set; } = new Dictionary<char, SymbolNode>();
+        public TableSymbols Next { get; private set; } = new TableSymbols();
     }
 }
